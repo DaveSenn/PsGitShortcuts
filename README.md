@@ -25,4 +25,4 @@ up "My commit message"
    If the command is not found, you will need to add a git alias or add `%ProgramFiles(x86)%\Git\cmd`
    (or `%ProgramFiles%\Git\cmd` if you're still on 32-bit) to your `PATH` environment variable.
 3. Clone the PsGitShortcuts repository to your local machine.
-4. From the PsGitShortcuts repository directory, run `.\install.ps1`.
+4. From the PsGitShortcuts repository directory, run `.\install.ps1`. 
