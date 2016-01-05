@@ -79,10 +79,11 @@ function PsGitHelp() {
 		}
 	}
 	
-	$maxLength += 10
+	$maxLength += 2
 	ForEach($x in $projects) {
-		Write-Host $x.Name.PadRight($maxLength, ' ') "("$x.Text "";
+		Write-Host $x.Name.PadRight($maxLength, ' ') "("$x.Text ")";
 	}
+	Write-Host "Use 'Get-Help [FunctionName]' to get more detailed help for a function."
 }
 
 # Export all functions

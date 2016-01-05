@@ -4,18 +4,33 @@ A collection of git shortcuts for PowerShell
 ## Commands
 
 ### UP
-
+Push everything to the remote repository.
 #### Parameters
 Name | Type | Description
 --- | --- | ---
 **msg** | `string` | The commit message
 
-1. Adds **ALL** files
-2. Commits the changes with the given message
-3. Pushes the commit to the configured remote repository
-
 ```powershell
 up "My commit message"
+```
+
+### CommitCount
+Prints the number of commits by each author.
+#### Parameters
+Name | Type | Description
+--- | --- | ---
+**allBranches** | `bool` | A value determining whether the commits of all branches ($True) or only of the current branch ($False) should outputted counted.
+
+```powershell
+CommitCount
+CommitCount $True
+```
+
+### PsGitHelp
+Prints the PS git shortcuts help.
+
+```powershell
+PsGitHelp
 ```
 
 ## Installing 
