@@ -6,9 +6,9 @@ A collection of git shortcuts for PowerShell
 ### UP
 Push everything to the remote repository.
 #### Parameters
-Name | Type | Description
+Name | Type | Mandator | yDescription
 --- | --- | ---
-**msg** | `string` | The commit message
+**msg** | `string` | True | The commit message.
 
 ```powershell
 up "My commit message"
@@ -17,13 +17,26 @@ up "My commit message"
 ### CommitCount
 Prints the number of commits by each author.
 #### Parameters
-Name | Type | Description
+Name | Type | Mandator | Description
 --- | --- | ---
-**allBranches** | `bool` | A value determining whether the commits of all branches ($True) or only of the current branch ($False) should outputted counted.
+**allBranches** | `bool` | False | A value determining whether the commits of all branches ($True) or only of the current branch ($False) should outputted counted.
 
 ```powershell
 CommitCount
 CommitCount $True
+```
+
+### SyncBranches
+Synchronizes the current branch with another branch.
+#### Parameters
+Name | Type | Mandator | Description
+--- | --- | ---
+**targetBranch** | `string` | True | The target branch.
+**msg** | `string` | False | The commit message.
+
+```powershell
+SyncBranches master
+SyncBranches master "My Message"
 ```
 
 ### PsGitHelp
