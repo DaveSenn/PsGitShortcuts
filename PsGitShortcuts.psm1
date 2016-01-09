@@ -145,6 +145,34 @@ function TryMergeRemoteBranch() {
 
 <#
     .SYNOPSIS 
+       Deletes the specified file completely from the repository inc. history.
+    .Description
+        Runs two times:
+        1) filter-branch to find the file and delete it.
+        2) reflog and gc to cleanup the repository.
+    .PARAMETER msg
+        The file to delete.
+    .EXAMPLE
+        DeleteFileCompletely movie.avi
+        Deletes movie.avi for the repository inc. history.
+#>
+function DeleteFileCompletely() {
+     param(
+        [Parameter(Mandatory=$true)][string]$file )
+
+    # Needs to run twice to work.... I don't know why but it works only the second time?!
+    For ( $i = 0; $i -le 1; $i++ ) {
+        # Delete the file.
+        git filter-branch --force --index-filter "git rm --ignore-unmatch --force -r $file" --prune-empty --tag-name-filter cat -- --all
+
+        # Cleanup the repository.
+        git reflog expire --all --expire=now
+        git gc --prune=now --aggressive
+    }
+}
+
+<#
+    .SYNOPSIS 
         Commits everything to the local repository.
     .Description
         1) Add ALL files.
@@ -173,25 +201,26 @@ function CommitAll() {
         Prints the help text.
 #>
 function PsGitHelp() { 
-    $projects = @(
+    $functions = @(
         @{ Name = "Up"; Text = "Add, Commit, Push."; }
         @{ Name = "CommitCount"; Text = "Print number of commits."; }
         @{ Name = "SyncBranches"; Text = "Sync the current branch with another branch."; }
+        @{ Name = "DeleteFileCompletely"; Text  = "Deletes the specified file completely from the repository inc. history." }
     )
     
     $maxLength = 0;
-    ForEach($x in $projects) {
+    ForEach($x in $functions) {
         if($x.Name.Length -gt $maxLength) {
             $maxLength = $x.Name.Length
         }
     }
     
     $maxLength += 2
-    ForEach($x in $projects) {
+    ForEach($x in $functions) {
         Write-Host $x.Name.PadRight($maxLength, ' ') "("$x.Text ")";
     }
     Write-Host "Use 'Get-Help [FunctionName]' to get more detailed help for a function."
 }
 
 # Export all functions
-Export-ModuleMember -Function Up, CommitCount, SyncBranches, PsGitHelp
+Export-ModuleMember -Function Up, CommitCount, SyncBranches, DeleteFileCompletely, PsGitHelp
