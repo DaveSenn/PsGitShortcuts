@@ -150,6 +150,7 @@ function TryMergeRemoteBranch() {
         Runs two times:
         1) filter-branch to find the file and delete it.
         2) reflog and gc to cleanup the repository.
+        https://help.github.com/articles/remove-sensitive-data/
     .PARAMETER msg
         The file to delete.
     .EXAMPLE
