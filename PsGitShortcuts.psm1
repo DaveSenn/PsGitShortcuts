@@ -13,7 +13,7 @@
         Up "My Message"
         Pushes all changes to the server using the given commit message.
 #>
-function Up() {
+Function Up() {
     param([Parameter(Mandatory=$True)][string]$msg )
         
     CommitAll $msg
@@ -40,7 +40,7 @@ function Up() {
         CommitCount -allBranches $true
         Print commit count of all branches.
 #>
-function CommitCount() {
+Function CommitCount() {
     param([bool]$allBranches = $false)
     
     if($allBranches) {
@@ -83,7 +83,7 @@ function CommitCount() {
         SyncBranches -targetBranch master -msg "My Message"
         Commits all changes and synchronizes the current branch with master.
 #>
-function SyncBranches() {
+Function SyncBranches() {
     param(
         [Parameter(Mandatory=$true)][string]$targetBranch,
         [Parameter(Mandatory=$False)][string]$msg)
@@ -122,7 +122,7 @@ function SyncBranches() {
         TryMergeRemoteBranch
         Tries to merge the branch.
 #>
-function TryMergeRemoteBranch() {
+Function TryMergeRemoteBranch() {
     git remote update
     $result = git status -uno
     if($result -And $result.Length -gt 1) {
@@ -151,13 +151,13 @@ function TryMergeRemoteBranch() {
         1) filter-branch to find the file and delete it.
         2) reflog and gc to cleanup the repository.
         https://help.github.com/articles/remove-sensitive-data/
-    .PARAMETER msg
+    .PARAMETER file
         The file to delete.
     .EXAMPLE
         DeleteFileCompletely movie.avi
         Deletes movie.avi for the repository inc. history.
 #>
-function DeleteFileCompletely() {
+Function DeleteFileCompletely() {
      param(
         [Parameter(Mandatory=$true)][string]$file )
 
@@ -174,6 +174,41 @@ function DeleteFileCompletely() {
 
 <#
     .SYNOPSIS 
+        Removes the specified file from the index and adds it to the .gitignore file.
+    .Description
+        1) Removes the file from the index.
+        2) Adds the file to the .gitignore file.
+    .PARAMETER file
+        The file to remove.
+    .PARAMETER ignoreFile
+        The path to the .gitignore file, if not specified the .gitignore file at the current location will be used.
+    .EXAMPLE
+        IgnoreFile test.txt
+        Removes test.txt from the index and adds it to the .gitignore file.
+    .EXAMPLE
+        IgnoreFile test.txt subfolder\.gitignore
+        Removes test.txt from the index and adds it to the specified .gitignore file.
+#>
+Function IgnoreFile() {
+     param(
+        [Parameter(Mandatory=$true)][string]$file,
+        [Parameter(Mandatory=$false)][string]$ignoreFile)
+
+    if( !$ignoreFile ) {
+    $ignore = Get-ChildItem -Filter .gitignore
+        if( !$ignoreFile.Count ) {
+            Write-Host "Could not find a .gitignore file, please run this command where your .gitignore file is located, or provide the $ignoreFile parameter." -ForegroundColor Red -BackgroundColor Black
+            return
+        }
+        $ignoreFile = $ignore.FullName
+    }
+
+    git rm --cached $file
+    Add-Content $ignoreFile "`n$file"
+}
+
+<#
+    .SYNOPSIS 
         Commits everything to the local repository.
     .Description
         1) Add ALL files.
@@ -184,7 +219,7 @@ function DeleteFileCompletely() {
         CommitAll "My Message"
         Commits all changes using the given commit message.
 #>
-function CommitAll() {
+Function CommitAll() {
     param(
         [Parameter(Mandatory=$true)][string]$msg )
         
@@ -201,12 +236,13 @@ function CommitAll() {
         PsGitHelp
         Prints the help text.
 #>
-function PsGitHelp() { 
+Function PsGitHelp() { 
     $functions = @(
         @{ Name = "Up"; Text = "Add, Commit, Push."; }
         @{ Name = "CommitCount"; Text = "Print number of commits."; }
         @{ Name = "SyncBranches"; Text = "Sync the current branch with another branch."; }
         @{ Name = "DeleteFileCompletely"; Text  = "Deletes the specified file completely from the repository inc. history." }
+        @{ Name = "IgnoreFile"; Text  = "Removes the specified file from the index and adds it to the .gitignore file." }
     )
     
     $maxLength = 0;
@@ -223,5 +259,5 @@ function PsGitHelp() {
     Write-Host "Use 'Get-Help [FunctionName]' to get more detailed help for a function."
 }
 
-# Export all functions
-Export-ModuleMember -Function Up, CommitCount, SyncBranches, DeleteFileCompletely, PsGitHelp
+# Export functions
+Export-ModuleMember -Function Up, CommitCount, SyncBranches, DeleteFileCompletely, IgnoreFile, PsGitHelp

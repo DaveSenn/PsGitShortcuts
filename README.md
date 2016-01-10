@@ -26,6 +26,30 @@ CommitCount
 CommitCount $True
 ```
 
+### IgnoreFile
+Removes the specified file from the index and adds it to the .gitignore file.
+#### Parameters
+Name | Type | Mandator | Description
+--- | --- | --- | ---
+**file** | `string` | True | The file to remove.
+**ignoreFile** | `string` | False | The path to the .gitignore file, if not specified the .gitignore file at the current location will be used.
+
+```powershell
+IgnoreFile test.txt
+IgnoreFile test.txt subfolder\.gitignore
+```
+
+### DeleteFileCompletely
+Deletes the specified file completely from the repository inc. history.
+#### Parameters
+Name | Type | Mandator | Description
+--- | --- | --- | ---
+**file** | `string` | True | The file to delete.
+
+```powershell
+DeleteFileCompletely movie.avi
+```
+
 ### SyncBranches
 Synchronizes the current branch with another branch.
 #### Parameters
