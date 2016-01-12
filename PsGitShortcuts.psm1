@@ -31,7 +31,7 @@ Function Up() {
             If $allBranches set to true:
                 git shortlog -s -n --all
     .PARAMETER allBranches
-        A value determining whether the commits of all branches ($True) or only of the current branch ($False) should outputted counted.
+        A value determining whether the commits of all branches ($True) or only of the current branch ($False) should be counted.
     .EXAMPLE
         CommitCount
         Print commit count of current branch only.
@@ -174,6 +174,19 @@ Function DeleteFileCompletely() {
 
 <#
     .SYNOPSIS 
+        Gets the name of each author.
+    .Description
+        Gets the name of each author.
+    .EXAMPLE
+        GetAuthors
+        Gets the authors.
+#>
+Function GetAuthors() {
+    return git log --format='%aN' | sort -u
+}
+
+<#
+    .SYNOPSIS 
         Removes the specified file from the index and adds it to the .gitignore file.
     .Description
         1) Removes the file from the index.
@@ -209,6 +222,63 @@ Function IgnoreFile() {
 
 <#
     .SYNOPSIS 
+        Gets the number of changes per author.
+    .Description
+        Gets the number of changes per author.
+    .PARAMETER author
+        The name of the author to get the stats of.
+    .PARAMETER allBranches
+        A value determining whether the commits of all branches ($True) or only of the current branch ($False) should be counted.
+    .EXAMPLE
+        GetChangesByAuthor
+        Gets the number of changes of all authors (current branch).
+    .EXAMPLE
+        GetChangesByAuthor "athor name" $True
+        Gets the number of changes of the user with the given name (all branches).
+#>
+function GetChangesByAuthor() {
+    param(
+        [Parameter(Mandatory=$False)][string]$author,
+        [Parameter(Mandatory=$False)][bool]$allBranches = $false
+    )
+    
+    if(!$author){
+        $authors = GetAuthors
+    } else {
+        $authors = [array] $author;
+    }
+    $result = @()
+    
+    ForEach($authorName in $authors) {
+        If($allBranches) {
+            $log = git log --author="$authorName" --pretty=tformat: --numstat --all
+        }
+        Else {
+            $log = git log --author="$authorName" --pretty=tformat: --numstat
+        }
+
+        $lines = $log.Split("`r`n")
+        
+        $add = 0
+        $delete = 0
+        
+        ForEach($line in $lines) {
+            $values = $line.Split()
+            Try {
+                $add +=  [convert]::ToInt32($values[0], 10)
+                $delete +=  [convert]::ToInt32($values[1], 10)
+            }
+            Catch {	}			
+        }
+        
+        $result += (New-Object PSObject -Property  @{ 'Add' = $add; 'Delete' = $delete; 'All' = $add + $delete; 'Author' = $authorName; })
+    }
+    
+    return $result | Sort-Object All -Descending
+}
+
+<#
+    .SYNOPSIS 
         Commits everything to the local repository.
     .Description
         1) Add ALL files.
@@ -227,6 +297,7 @@ Function CommitAll() {
     git commit -m $msg
 }
 
+
 <#
     .SYNOPSIS 
         Prints the PS git shortcuts help.
@@ -243,6 +314,7 @@ Function PsGitHelp() {
         @{ Name = "SyncBranches"; Text = "Sync the current branch with another branch."; }
         @{ Name = "DeleteFileCompletely"; Text  = "Deletes the specified file completely from the repository inc. history." }
         @{ Name = "IgnoreFile"; Text  = "Removes the specified file from the index and adds it to the .gitignore file." }
+        @{ Name = "GetAuthors"; Text  = "Gets the name of each author." }
     )
     
     $maxLength = 0;
@@ -260,4 +332,4 @@ Function PsGitHelp() {
 }
 
 # Export functions
-Export-ModuleMember -Function Up, CommitCount, SyncBranches, DeleteFileCompletely, IgnoreFile, PsGitHelp
+Export-ModuleMember -Function Up, CommitCount, SyncBranches, DeleteFileCompletely, IgnoreFile, GetAuthors, GetChangesByAuthor, PsGitHelp
