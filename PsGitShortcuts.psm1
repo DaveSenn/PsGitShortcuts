@@ -22,6 +22,26 @@ Function Up() {
 
 <#
     .SYNOPSIS 
+        Commits everything to the local repository.
+    .Description
+        1) Add ALL files.
+        2) Commits the changes.
+    .PARAMETER msg
+        The commit message.
+    .EXAMPLE
+        CommitAll "My Message"
+        Commits all changes using the given commit message.
+#>
+Function CommitAll() {
+    param(
+        [Parameter(Mandatory=$true)][string]$msg )
+        
+    git add -A
+    git commit -m $msg
+}
+
+<#
+    .SYNOPSIS 
         Prints the number of commits by each author.
     .Description
         Uses git shortlog feature to print out the number of commits per author.
@@ -279,27 +299,6 @@ function GetChangesByAuthor() {
 
 <#
     .SYNOPSIS 
-        Commits everything to the local repository.
-    .Description
-        1) Add ALL files.
-        2) Commits the changes.
-    .PARAMETER msg
-        The commit message.
-    .EXAMPLE
-        CommitAll "My Message"
-        Commits all changes using the given commit message.
-#>
-Function CommitAll() {
-    param(
-        [Parameter(Mandatory=$true)][string]$msg )
-        
-    git add -A
-    git commit -m $msg
-}
-
-
-<#
-    .SYNOPSIS 
         Prints the PS git shortcuts help.
     .Description
         Prints a basic help text.
@@ -310,6 +309,7 @@ Function CommitAll() {
 Function PsGitHelp() { 
     $functions = @(
         @{ Name = "Up"; Text = "Add, Commit, Push."; }
+		@{ Name = "CommitAll"; Text = "Add -A, Commit."; }
         @{ Name = "CommitCount"; Text = "Print number of commits."; }
         @{ Name = "SyncBranches"; Text = "Sync the current branch with another branch."; }
         @{ Name = "DeleteFileCompletely"; Text  = "Deletes the specified file completely from the repository inc. history." }
@@ -332,4 +332,4 @@ Function PsGitHelp() {
 }
 
 # Export functions
-Export-ModuleMember -Function Up, CommitCount, SyncBranches, DeleteFileCompletely, IgnoreFile, GetAuthors, GetChangesByAuthor, PsGitHelp
+Export-ModuleMember -Function Up, CommitAll, CommitCount, SyncBranches, DeleteFileCompletely, IgnoreFile, GetAuthors, GetChangesByAuthor, PsGitHelp
