@@ -1,5 +1,9 @@
 # Comment help: http://blogs.technet.com/b/heyscriptingguy/archive/2010/01/07/hey-scripting-guy-january-7-2010.aspx
 
+###################################################################################################################
+### Add, Commit, Push related functions
+###################################################################################################################
+
 <#
     .SYNOPSIS 
         Push everything to the remote repository.
@@ -40,6 +44,10 @@ Function CommitAll() {
     git commit -m $msg
 }
 
+###################################################################################################################
+### Log related functions
+###################################################################################################################
+
 <#
     .SYNOPSIS 
         Prints the number of commits by each author.
@@ -70,6 +78,100 @@ Function CommitCount() {
         git shortlog -s -n
     }
 }
+
+<#
+    .SYNOPSIS 
+        Gets the name of each author.
+    .Description
+        Gets the name of each author.
+    .EXAMPLE
+        GetAuthors
+        Gets the authors.
+#>
+Function GetAuthors() {
+    return git log --format='%aN' | sort -u
+}
+
+<#
+    .SYNOPSIS 
+        Gets the number of changes per author.
+    .Description
+        Gets the number of changes per author.
+    .PARAMETER author
+        The name of the author to get the stats of.
+    .PARAMETER allBranches
+        A value determining whether the commits of all branches ($True) or only of the current branch ($False) should be counted.
+    .EXAMPLE
+        GetChangesByAuthor
+        Gets the number of changes of all authors (current branch).
+    .EXAMPLE
+        GetChangesByAuthor "athor name" $True
+        Gets the number of changes of the user with the given name (all branches).
+#>
+function GetChangesByAuthor() {
+    param(
+        [Parameter(Mandatory=$False)][string]$author,
+        [Parameter(Mandatory=$False)][bool]$allBranches = $false
+    )
+    
+    if(!$author){
+        $authors = GetAuthors
+    } else {
+        $authors = [array] $author;
+    }
+    $result = @()
+    
+    ForEach($authorName in $authors) {
+        If($allBranches) {
+            $log = git log --author="$authorName" --pretty=tformat: --numstat --all
+        }
+        Else {
+            $log = git log --author="$authorName" --pretty=tformat: --numstat
+        }
+
+        $lines = $log.Split("`r`n")
+        
+        $add = 0
+        $delete = 0
+        
+        ForEach($line in $lines) {
+            $values = $line.Split()
+            Try {
+                $add +=  [convert]::ToInt32($values[0], 10)
+                $delete +=  [convert]::ToInt32($values[1], 10)
+            }
+            Catch {	}			
+        }
+        
+        $result += (New-Object PSObject -Property  @{ 'Add' = $add; 'Delete' = $delete; 'All' = $add + $delete; 'Author' = $authorName; })
+    }
+    
+    return $result | Sort-Object All -Descending
+}
+
+<#
+    .SYNOPSIS 
+        Prints a visual tree of the repository history.
+    .Description
+        Prints a visual tree of the repository history.
+    .EXAMPLE
+        GitTree
+        Prints a commit tree.
+#>
+Function GitTree() {
+	git log --graph --abbrev-commit --decorate --format=format:'%C(bold Magenta)%h%C(reset) - %s%C(reset) - %C(bold cyan)%an%C(reset) %C(bold green)(%ar)%C(reset) %C(dim white) %C(bold yellow)%d%C(reset)'
+	
+	# Alternatives
+	# git log --oneline --decorate --all --graph
+	# git log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"
+	# lgit og --graph --abbrev-commit --decorate --format=format:'%C(bold Magenta)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
+	# git log --graph --abbrev-commit --decorate --format=format:'%C(bold Magenta)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+	# git log --graph --abbrev-commit --decorate --format=format:'%C(bold Magenta)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
+}
+
+###################################################################################################################
+### Merge, sync. related functions
+###################################################################################################################
 
 <#
     .SYNOPSIS 
@@ -194,19 +296,6 @@ Function DeleteFileCompletely() {
 
 <#
     .SYNOPSIS 
-        Gets the name of each author.
-    .Description
-        Gets the name of each author.
-    .EXAMPLE
-        GetAuthors
-        Gets the authors.
-#>
-Function GetAuthors() {
-    return git log --format='%aN' | sort -u
-}
-
-<#
-    .SYNOPSIS 
         Removes the specified file from the index and adds it to the .gitignore file.
     .Description
         1) Removes the file from the index.
@@ -240,61 +329,8 @@ Function IgnoreFile() {
     Add-Content $ignoreFile "`n$file"
 }
 
-<#
-    .SYNOPSIS 
-        Gets the number of changes per author.
-    .Description
-        Gets the number of changes per author.
-    .PARAMETER author
-        The name of the author to get the stats of.
-    .PARAMETER allBranches
-        A value determining whether the commits of all branches ($True) or only of the current branch ($False) should be counted.
-    .EXAMPLE
-        GetChangesByAuthor
-        Gets the number of changes of all authors (current branch).
-    .EXAMPLE
-        GetChangesByAuthor "athor name" $True
-        Gets the number of changes of the user with the given name (all branches).
-#>
-function GetChangesByAuthor() {
-    param(
-        [Parameter(Mandatory=$False)][string]$author,
-        [Parameter(Mandatory=$False)][bool]$allBranches = $false
-    )
-    
-    if(!$author){
-        $authors = GetAuthors
-    } else {
-        $authors = [array] $author;
-    }
-    $result = @()
-    
-    ForEach($authorName in $authors) {
-        If($allBranches) {
-            $log = git log --author="$authorName" --pretty=tformat: --numstat --all
-        }
-        Else {
-            $log = git log --author="$authorName" --pretty=tformat: --numstat
-        }
-
-        $lines = $log.Split("`r`n")
-        
-        $add = 0
-        $delete = 0
-        
-        ForEach($line in $lines) {
-            $values = $line.Split()
-            Try {
-                $add +=  [convert]::ToInt32($values[0], 10)
-                $delete +=  [convert]::ToInt32($values[1], 10)
-            }
-            Catch {	}			
-        }
-        
-        $result += (New-Object PSObject -Property  @{ 'Add' = $add; 'Delete' = $delete; 'All' = $add + $delete; 'Author' = $authorName; })
-    }
-    
-    return $result | Sort-Object All -Descending
+Function GetRepositoryRoot() {
+	
 }
 
 <#
@@ -332,4 +368,4 @@ Function PsGitHelp() {
 }
 
 # Export functions
-Export-ModuleMember -Function Up, CommitAll, CommitCount, SyncBranches, DeleteFileCompletely, IgnoreFile, GetAuthors, GetChangesByAuthor, PsGitHelp
+Export-ModuleMember -Function Up, CommitAll, CommitCount, GetAuthors, GetChangesByAuthor, GitTree, SyncBranches, DeleteFileCompletely, IgnoreFile, PsGitHelp
