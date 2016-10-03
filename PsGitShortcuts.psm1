@@ -334,6 +334,17 @@ Function GetRepositoryRoot() {
 }
 
 <#
+git config --global user.name "John Doe"
+git config --global user.email "john@example.com"
+ #>
+ Function SetUserData() {
+	param(
+        [Parameter(Mandatory=$False)][string]$author,
+        [Parameter(Mandatory=$False)][bool]$allBranches = $false
+    )
+ }
+
+<#
     .SYNOPSIS 
         Prints the PS git shortcuts help.
     .Description
