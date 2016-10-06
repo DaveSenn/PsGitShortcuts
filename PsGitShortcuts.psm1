@@ -235,6 +235,12 @@ Function IgnoreFile() {
     .EXAMPLE
         GetChangesByAuthor "athor name" $True
         Gets the number of changes of the user with the given name (all branches).
+    .EXAMPLE
+        GetChangesByAuthor -allBranches $True
+        Gets the number of changes of all user for all branches.
+    .EXAMPLE
+        GetChangesByAuthor
+        Gets the number of changes of all user for the current branche.
 #>
 function GetChangesByAuthor() {
     param(
@@ -256,22 +262,23 @@ function GetChangesByAuthor() {
         Else {
             $log = git log --author="$authorName" --pretty=tformat: --numstat
         }
-
-        $lines = $log.Split("`r`n")
-        
-        $add = 0
-        $delete = 0
-        
-        ForEach($line in $lines) {
-            $values = $line.Split()
-            Try {
-                $add +=  [convert]::ToInt32($values[0], 10)
-                $delete +=  [convert]::ToInt32($values[1], 10)
-            }
-            Catch {	}			
-        }
-        
-        $result += (New-Object PSObject -Property  @{ 'Add' = $add; 'Delete' = $delete; 'All' = $add + $delete; 'Author' = $authorName; })
+		
+		If($log) {
+			$lines = $log.Split("`r`n") 
+			$add = 0
+			$delete = 0
+			
+			ForEach($line in $lines) {
+				$values = $line.Split()
+				Try {
+					$add +=  [convert]::ToInt32($values[0], 10)
+					$delete +=  [convert]::ToInt32($values[1], 10)
+				}
+				Catch {	}			
+			}
+			
+			$result += (New-Object PSObject -Property  @{ 'Add' = $add; 'Delete' = $delete; 'All' = $add + $delete; 'Author' = $authorName; })
+		}
     }
     
     return $result | Sort-Object All -Descending
