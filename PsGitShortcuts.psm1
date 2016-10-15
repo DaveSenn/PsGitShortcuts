@@ -333,15 +333,54 @@ Function GetRepositoryRoot() {
 	
 }
 
-<#
-git config --global user.name "John Doe"
-git config --global user.email "john@example.com"
- #>
- Function SetUserData() {
+ <#
+    .SYNOPSIS 
+       Configures the git user data.
+    .Description
+        Sets the user name and the user email globally or local.
+		Runs:
+			git config --global user.name "John Doe"
+			git config --global user.email "john@example.com"
+    .PARAMETER name
+        The user name.
+    .PARAMETER email
+        The user email address.
+    .PARAMETER global
+        A value determining whether the configuration gets applied globally or not.
+    .EXAMPLE
+		SetUserData "User Name"
+		Sets the user name globally.
+		
+		SetUserData "User Name" "mail@gmail.com"
+		Sets the user name and email globally.
+		
+		SetUserData "User Name" "mail@gmail.com" $false
+		Sets the user name and email localy.
+#>
+Function SetUserData() {
 	param(
-        [Parameter(Mandatory=$False)][string]$author,
-        [Parameter(Mandatory=$False)][bool]$allBranches = $false
-    )
+        [Parameter(Mandatory=$False)][string] $name = $null,
+        [Parameter(Mandatory=$False)][string] $email = $null,
+		[Parameter(Mandatory=$False)][bool] $global = $true)
+	
+	# user name
+	if($name) {
+		if($global) {
+			git config --global user.name $name
+		}
+		else {
+			git config user.name $name --replace-all
+		}
+	}
+	# user password
+	if($email) {
+		if($global) {
+			git config --global user.email $email
+		}
+		else {
+			git config user.email $email --replace-all
+		}
+	}
  }
 
 <#
@@ -379,4 +418,4 @@ Function PsGitHelp() {
 }
 
 # Export functions
-Export-ModuleMember -Function Up, CommitAll, CommitCount, GetAuthors, GetChangesByAuthor, GitTree, SyncBranches, DeleteFileCompletely, IgnoreFile, PsGitHelp
+Export-ModuleMember -Function Up, CommitAll, CommitCount, GetAuthors, GetChangesByAuthor, GitTree, SyncBranches, DeleteFileCompletely, IgnoreFile, SetUserData,  PsGitHelp
