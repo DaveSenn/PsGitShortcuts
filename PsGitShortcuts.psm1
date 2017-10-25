@@ -129,6 +129,10 @@ function GetChangesByAuthor() {
             $log = git log --author="$authorName" --pretty=tformat: --numstat
         }
 
+		if(!$log) {
+			continue;
+		}
+		
         $lines = $log.Split("`r`n")
         
         $add = 0
