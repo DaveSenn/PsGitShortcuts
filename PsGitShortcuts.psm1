@@ -235,6 +235,61 @@ Function IgnoreFile() {
     .EXAMPLE
         GetChangesByAuthor "athor name" $True
         Gets the number of changes of the user with the given name (all branches).
+#>
+function GetChangesByAuthor() {
+    param(
+        [Parameter(Mandatory=$False)][string]$author,
+        [Parameter(Mandatory=$False)][bool]$allBranches = $false
+    )
+    
+    if(!$author){
+        $authors = GetAuthors
+    } else {
+        $authors = [array] $author;
+    }
+    $result = @()
+    
+    ForEach($authorName in $authors) {
+        If($allBranches) {
+            $log = git log --author="$authorName" --pretty=tformat: --numstat --all
+        }
+        Else {
+            $log = git log --author="$authorName" --pretty=tformat: --numstat
+        }
+
+        $lines = $log.Split("`r`n")
+        
+        $add = 0
+        $delete = 0
+        
+        ForEach($line in $lines) {
+            $values = $line.Split()
+            Try {
+                $add +=  [convert]::ToInt32($values[0], 10)
+                $delete +=  [convert]::ToInt32($values[1], 10)
+            }
+            Catch {	}			
+        }
+        
+        $result += (New-Object PSObject -Property  @{ 'Add' = $add; 'Delete' = $delete; 'All' = $add + $delete; 'Author' = $authorName; })
+    }
+    
+    return $result | Sort-Object All -Descending
+<#
+    .SYNOPSIS 
+        Gets the number of changes per author.
+    .Description
+        Gets the number of changes per author.
+    .PARAMETER author
+        The name of the author to get the stats of.
+    .PARAMETER allBranches
+        A value determining whether the commits of all branches ($True) or only of the current branch ($False) should be counted.
+    .EXAMPLE
+        GetChangesByAuthor
+        Gets the number of changes of all authors (current branch).
+    .EXAMPLE
+        GetChangesByAuthor "athor name" $True
+        Gets the number of changes of the user with the given name (all branches).
     .EXAMPLE
         GetChangesByAuthor -allBranches $True
         Gets the number of changes of all user for all branches.
