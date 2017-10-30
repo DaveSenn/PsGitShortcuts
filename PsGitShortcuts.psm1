@@ -275,6 +275,7 @@ function GetChangesByAuthor() {
     }
     
     return $result | Sort-Object All -Descending
+}
 <#
     .SYNOPSIS 
         Gets the number of changes per author.
