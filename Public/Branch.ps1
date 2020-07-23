@@ -72,6 +72,11 @@ Function SyncBranch() {
     # Checkout and update the target branch
     git checkout $branch
     $out = $(git pull) 2>&1
+    if ( $out -is [System.Management.Automation.ErrorRecord] ) {
+        Write-Host $out.Exception.Message
+        Write-Host "Failed to pull branch $branch => abort"
+        return
+    }
     if ( !$out.Contains( "Already up to date." ) ) {
         Write-Host "Failed to pull branch $branch => abort"
         return
@@ -80,6 +85,11 @@ Function SyncBranch() {
     # Add changes from $branch to current branch
     git checkout $startingBranch
     $out = $(git rebase $branch) 2>&1
+    if ( $out -is [System.Management.Automation.ErrorRecord] ) {
+        Write-Host $out.Exception.Message
+        Write-Host "Rebase $branch failed => abort" -ForegroundColor Yellow
+        return
+    }
     if ( $out.Contains( "CONFLICT" ) -or !$out.Contains( "Successfully" ) ) {
         foreach ( $x in $out ) {
             Write-Host $x
