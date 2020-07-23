@@ -57,3 +57,7 @@ Import-Module C:\Repos\PsGitShortcuts.psm1
 ## Contribute
 If you have an idea for a new feature or if you have found a bug please open an issue and i will take a look at it.
 You can also open a PR but maybe it's better to first open a issue.
+
+### Contributors
+
+[![](https://contributors-img.web.app/image?repo=DaveSenn/PsGitShortcuts)](https://github.com/DaveSenn/PsGitShortcuts/graphs/contributors)
