@@ -1,4 +1,6 @@
 # PsGitShortcuts
+[![powershellgallery](https://img.shields.io/powershellgallery/v/PsGitShortcuts.svg)](https://www.powershellgallery.com/packages/PsGitShortcuts)
+[![downloads](https://img.shields.io/powershellgallery/dt/PsGitShortcuts.svg?label=downloads)](https://www.powershellgallery.com/packages/PsGitShortcuts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A collection of git shortcuts for PowerShell.
