@@ -12,7 +12,7 @@
 RootModule = 'PsGitShortcuts.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.0'
+ModuleVersion = '1.0.1'
 
 # ID used to uniquely identify this module
 GUID = '5e0c3114-c5df-4dae-9339-f2cf5170b9d8'
@@ -125,7 +125,7 @@ PrivateData = @{
         ProjectUri = "https://github.com/DaveSenn/PsGitShortcuts"
 
         # A URL to an icon representing this module.
-        IconUri = "https://github.com/DaveSenn/PsGitShortcuts/blob/master/art/PsGitShortcutsIcon.png"
+        IconUri = "https://raw.githubusercontent.com/DaveSenn/PsGitShortcuts/master/art/PsGitShortcutsIcon.png"
 
         # ReleaseNotes of this module
         ReleaseNotes = "Initial release."
