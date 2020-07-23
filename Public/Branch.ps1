@@ -74,11 +74,11 @@ Function SyncBranch() {
     $out = $(git pull) 2>&1
     if ( $out -is [System.Management.Automation.ErrorRecord] ) {
         Write-Host $out.Exception.Message
-        Write-Host "Failed to pull branch $branch => abort"
+        Write-Host "Failed to pull branch $branch => abort" -ForegroundColor Yellow
         return
     }
     if ( !$out.Contains( "Already up to date." ) ) {
-        Write-Host "Failed to pull branch $branch => abort"
+        Write-Host "Failed to pull branch $branch => abort" -ForegroundColor Yellow
         return
     }
 
