@@ -125,7 +125,7 @@ PrivateData = @{
         ProjectUri = "https://github.com/DaveSenn/PsGitShortcuts"
 
         # A URL to an icon representing this module.
-        IconUri = "https://github.com/DaveSenn/PsGitShortcuts/blob/master/PsGitShortcuts.png"
+        IconUri = "https://github.com/DaveSenn/PsGitShortcuts/blob/master/art/PsGitShortcutsIcon.png"
 
         # ReleaseNotes of this module
         ReleaseNotes = "Initial release."
