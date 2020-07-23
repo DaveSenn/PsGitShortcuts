@@ -6,20 +6,24 @@
 *.user
 *.sln.docstates
 
+# Visual Studio cache/options directory
+# Visual studio settings
+.vs/
+.vs
+
+# VS Code
+.vscode
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
 x64/
-build/
+.build/
 bld/
 [Bb]in/
 [Oo]bj/
-
-#Coverity build results
-cov-int/
-cov-int.zip
 
 # Roslyn cache directories
 *.ide/
@@ -27,11 +31,6 @@ cov-int.zip
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
-
-#NUNIT
-*.VisualState.xml
-TestResult.xml
-!.tools/NUnit-2.6.4/bin
 
 # Build Results of an ATL Project
 [Dd]ebugPS/
@@ -63,9 +62,6 @@ dlldata.c
 *.svclog
 *.scc
 
-# Chutzpah Test files
-_Chutzpah*
-
 # Visual C++ cache files
 ipch/
 *.aps
@@ -79,9 +75,6 @@ ipch/
 *.vsp
 *.vspx
 
-# TFS 2012 Local Workspace
-$tf/
-
 # Guidance Automation Toolkit
 *.gpState
 
@@ -90,74 +83,16 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
-# JustCode is a .NET coding addin-in
-.JustCode
-
 # TeamCity is a build add-in
 _TeamCity*
 
 # DotCover is a Code Coverage Tool
 *.dotCover
 
-# NCrunch
-_NCrunch_*
-.*crunch*.local.xml
-
-# MightyMoose
-*.mm.*
-AutoTest.Net/
-
-# Web workbench (sass)
-.sass-cache/
-
-# Installshield output folder
-[Ee]xpress/
-
-# DocProject is a documentation generator add-in
-DocProject/buildhelp/
-DocProject/Help/*.HxT
-DocProject/Help/*.HxC
-DocProject/Help/*.hhc
-DocProject/Help/*.hhk
-DocProject/Help/*.hhp
-DocProject/Help/Html2
-DocProject/Help/html
-
-# Click-Once directory
-publish/
-
-# Publish Web Output
-*.[Pp]ublish.xml
-*.azurePubxml
-## TODO: Comment the next line if you want to checkin your
-## web deploy settings but do note that will include unencrypted
-## passwords
-*.pubxml
-
-# NuGet Packages Directory
-packages/*
-packages
-## TODO: If the tool you use requires repositories.config
-## uncomment the next line
-#!packages/repositories.config
-# NuGet packages
-*.nupkg
-
-# Enable "build/" folder in the NuGet Packages folder since
-# NuGet packages use it for MSBuild targets.
-# This line needs to be after the ignore of the build folder
-# (and the packages folder if the line above has been uncommented)
-!packages/build/
-
-# Windows Azure Build Output
-csx/
-*.build.csdef
-
 # Windows Store app package directory
 AppPackages/
 
 # Others
-sql/
 *.Cache
 ClientBin/
 [Ss]tyle[Cc]op.*
@@ -168,9 +103,6 @@ ClientBin/
 *.pfx
 *.publishsettings
 node_modules/
-
-# RIA/Silverlight projects
-Generated_Code/
 
 # Backup & report files from converting an old project file
 # to a newer Visual Studio version. Backup files are not needed,
@@ -199,6 +131,4 @@ FakesAssemblies/
 # Temp Files
 *._*
 
-# Sphinx build directory
-/Docs/_build
-Output
+############### NEW ADDED

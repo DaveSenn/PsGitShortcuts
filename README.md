@@ -1,80 +1,59 @@
 # PsGitShortcuts
-A collection of git shortcuts for PowerShell
+A collection of git shortcuts for PowerShell.
+
+PsGitShortcuts is compatible with .NET Framework based Powershell 5.X versions and Powershell (Core) 7.
 
 ## Commands
 
-### UP
-Push everything to the remote repository.
-#### Parameters
-Name | Type | Mandator | Description
---- | --- | --- | ---
-**msg** | `string` | True | The commit message.
+Name | Description
+--- | ---
+**PsGitHelp** | Prints some information about PsGitShortcuts
+**AddAll** | Adds all changes.
+**CommitAll** | Commits all changes to the local repository.
+**CommitCount** | Prints the number of commits by each author.
+**GetAuthors** | Gets the name of each author.
+**GetChangesByAuthor** | Gets the number of changes per author.
+**GitTree** | Prints a visual tree of the repository history.
+**OpenGitConfig** | Opens the git configuration.
+**PurgeBranches** | Deletes all brunches but master. Can be used to get rid of old/merged feature branches
+**SetGitDiffTool** | Configures the git diff tool.
+**SetGitEditor** | Configures the git editor.
+**SetGitMergeTool** | Configures the git merge tool.
+**SetUserData** | Configures the git user data.
+**SyncBranch** | Adds all changes from the specified branch to the current branch. You can use this e.g. to add changes from master to your feature branch.
+**Up** | Push everything to the remote repository.
 
-```powershell
-up "My commit message"
-```
+## Help / Documentation
+Each function within the PsGitShortcuts module comes with a documentation (in powershell style/syntax)
 
-### CommitCount
-Prints the number of commits by each author.
-#### Parameters
-Name | Type | Mandator | Description
---- | --- | --- | ---
-**allBranches** | `bool` | False | A value determining whether the commits of all branches ($True) or only of the current branch ($False) should outputted counted.
-
-```powershell
-CommitCount
-CommitCount $True
-```
-
-### IgnoreFile
-Removes the specified file from the index and adds it to the .gitignore file.
-#### Parameters
-Name | Type | Mandator | Description
---- | --- | --- | ---
-**file** | `string` | True | The file to remove.
-**ignoreFile** | `string` | False | The path to the .gitignore file, if not specified the .gitignore file at the current location will be used.
-
-```powershell
-IgnoreFile test.txt
-IgnoreFile test.txt subfolder\.gitignore
-```
-
-### DeleteFileCompletely
-Deletes the specified file completely from the repository inc. history.
-#### Parameters
-Name | Type | Mandator | Description
---- | --- | --- | ---
-**file** | `string` | True | The file to delete.
-
-```powershell
-DeleteFileCompletely movie.avi
-```
-
-### SyncBranches
-Synchronizes the current branch with another branch.
-#### Parameters
-Name | Type | Mandator | Description
---- | --- | --- | ---
-**targetBranch** | `string` | True | The target branch.
-**msg** | `string` | False | The commit message.
-
-```powershell
-SyncBranches master
-SyncBranches master "My Message"
-```
-
-### PsGitHelp
-Prints the PS git shortcuts help.
-
+You can run the following command to get the help of all functions.
 ```powershell
 PsGitHelp
 ```
 
+Or you can use `Get-Help` to get the documentation of a single function
+```powershell
+Get-Help Up -Full
+```
+
 ## Installing 
 
-1. Verify execution of scripts is allowed with `Get-ExecutionPolicy` (should be `RemoteSigned` or `Unrestricted`). If scripts are not enabled, run PowerShell as Administrator and call `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm`.
-2. Verify that `git` can be run from PowerShell.
-   If the command is not found, you will need to add a git alias or add `%ProgramFiles(x86)%\Git\cmd`
-   (or `%ProgramFiles%\Git\cmd` if you're still on 32-bit) to your `PATH` environment variable.
-3. Clone the PsGitShortcuts repository to your local machine.
-4. From the PsGitShortcuts repository directory, run `.\install.ps1`. 
+The **recommended** (and easiest) way is to install PsGitShortcuts from the [PowerShell Gallery](https://www.powershellgallery.com/packages/PsGitShortcuts)
+```powershell
+Install-Module -Name PsGitShortcuts
+```
+
+But you can also clone the repository and add it to your PowerShell profile.
+
+The following variable will contain the location of your PowerShell profile.
+```powershell
+$PROFILE
+```
+Add PsGitShortcuts to your profile like this:
+```powershell
+Import-Module C:\Repos\PsGitShortcuts.psm1
+```
+
+## Contribute
+If you have an idea for a new feature or if you have found a bug please open an issue and i will take a look at it.
+You can also open a PR but maybe it's better to first open a issue.
