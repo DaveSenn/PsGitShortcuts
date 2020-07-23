@@ -12,7 +12,7 @@
 RootModule = 'PsGitShortcuts.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.1'
+ModuleVersion = '1.0.0'
 
 # ID used to uniquely identify this module
 GUID = '5e0c3114-c5df-4dae-9339-f2cf5170b9d8'
@@ -84,7 +84,12 @@ FunctionsToExport = @(
     "SetGitEditor",
     "SetGitMergeTool",
     "SetGitDiffTool",
-    "OpenGitConfig"
+    "OpenGitConfig",
+    # Branch
+    "PurgeBranches",
+    "SyncBranch",
+    # Help
+    "PsGitHelp"
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -123,10 +128,10 @@ PrivateData = @{
         IconUri = "https://github.com/DaveSenn/PsGitShortcuts/blob/master/PsGitShortcuts.png"
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = "Initial release."
 
         # Prerelease string of this module
-        Prerelease = 'alpha'
+        # Prerelease = 'alpha'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         RequireLicenseAcceptance = $false
