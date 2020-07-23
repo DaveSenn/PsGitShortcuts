@@ -14,7 +14,8 @@
 Function Up() {
     param (
         [Parameter(Mandatory=$true)]
-        [string]$msg 
+        [string]$msg,
+        [switch]$force = $false
     )
     # Abort if not in Git repository
     if ( !(IsGitRepo) ) {
@@ -25,7 +26,11 @@ Function Up() {
     CommitAll $msg
 
     # Push
-    $out = $(git push) 2>&1
+    $cmd = "push"
+    if ( $force ) {
+        $cmd += " -f"
+    }
+    $out = $(git $cmd) 2>&1
 
     # Auto set-upstream
     if ( $out.Length -ge 4 ) {
@@ -34,6 +39,12 @@ Function Up() {
             $message = $out[3].Exception.Message
             $setUpstreamCommand = $message.SubString( $message.IndexOf( "git push --set-" ) ) -Replace "`n","" -Replace "`r",""
             Invoke-Expression -Command $setUpstreamCommand
+        }
+        else {
+            # Print other erors so that the user can see the problem
+            foreach( $errorLine in $out ) {
+                Write-Host $errorLine
+            }
         }
     }
 }

@@ -29,7 +29,12 @@ $exportModuleMemberParams = @{
         "SetGitEditor",
         "SetGitMergeTool",
         "SetGitDiffTool",
-        "OpenGitConfig"
+        "OpenGitConfig",
+        # Branch
+        "PurgeBranches",
+        "SyncBranch",
+        # Help
+        "PsGitHelp"
     )
 }
 Export-ModuleMember @exportModuleMemberParams

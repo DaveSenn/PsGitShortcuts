@@ -12,3 +12,12 @@ Function IsGitRepo {
 
     Return $isRepo
 }
+
+<#
+.SYNOPSIS 
+    Gets the name of the currently checked out branch.
+#>
+Function GetCurrentBranchName() {
+    $branchName = &git rev-parse --abbrev-ref HEAD 
+    return $branchName
+}
