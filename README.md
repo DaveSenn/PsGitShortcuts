@@ -1,4 +1,6 @@
 # PsGitShortcuts
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A collection of git shortcuts for PowerShell.
 
 PsGitShortcuts is compatible with .NET Framework based Powershell 5.X versions and Powershell (Core) 7.
