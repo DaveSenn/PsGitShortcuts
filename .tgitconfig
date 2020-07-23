@@ -1,0 +1,7 @@
+[bugtraq]
+	url = http://devweb/lim/edit_bug.aspx?id=%BUGID%
+	message = "#%BUGID%"
+	label = LID:
+	append = true
+	number = true
+	warnifnoissue = true
