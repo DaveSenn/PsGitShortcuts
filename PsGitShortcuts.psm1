@@ -33,6 +33,7 @@ $exportModuleMemberParams = @{
         # Branch
         "PurgeBranches",
         "SyncBranch",
+        "CloseFeature",
         # Help
         "PsGitHelp"
     )

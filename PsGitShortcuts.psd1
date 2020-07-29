@@ -12,7 +12,7 @@
 RootModule = 'PsGitShortcuts.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.2'
+ModuleVersion = '1.1.0'
 
 # ID used to uniquely identify this module
 GUID = '5e0c3114-c5df-4dae-9339-f2cf5170b9d8'
@@ -88,6 +88,7 @@ FunctionsToExport = @(
     # Branch
     "PurgeBranches",
     "SyncBranch",
+    "CloseFeature",
     # Help
     "PsGitHelp"
 )

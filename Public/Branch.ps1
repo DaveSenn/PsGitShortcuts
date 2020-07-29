@@ -101,3 +101,45 @@ Function SyncBranch() {
     # Update remote
     Up "Sync with $branch"
 }
+
+<#
+.SYNOPSIS 
+    Closes the currently checked out feature branch by switching to the specified branch (default is master)
+    and deleting the 'starting/current' feature branch.
+.Description
+    - Checks the specifed branch out
+    - Pulls changes
+    - Deletes teh starting feature branch
+.PARAMETER masterName
+    The name of the branch to switch to. Default is master.
+.EXAMPLE
+    CloseFeature
+    CloseFeature myBranch
+#>
+Function CloseFeature() {
+    param (
+        [string]$branch = "master"
+    )
+
+    # Abort if not in Git repository
+    if ( !(IsGitRepo) ) {
+        Return
+    }
+
+    # Check same branch
+    $startingBranch = GetCurrentBranchName
+    if ( $startingBranch -eq $branch ) {
+        Write-Host "Cannot close target branch (same as current branch) - select another target branch" -ForegroundColor Yellow
+        return
+    }
+
+    # Checkout and update the target branch
+    git checkout $branch
+    $out = $(git pull) 2>&1
+    if ( !$out.Contains( "Already up to date." ) ) {
+        Write-Host "Failed to pull branch $branch"
+    }
+
+    # Delete the starting branch
+    git branch -D $startingBranch
+}

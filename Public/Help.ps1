@@ -11,5 +11,8 @@ Function PsGitHelp() {
     Get-Command -Module PsGitShortcuts | Foreach-Object { Get-Help $_.Name; Write-Host "------------------------------------------" }
 
     Write-Host "Available commands:"
-    Get-Command -Module PsGitShortcuts | Foreach-Object { Write-Host $_.Name }
+    Get-Command -Module PsGitShortcuts 
+    | Where-Object { $_.Name -ne "IsGitRepo" -and $_.Name -ne "GetCurrentBranchName" } 
+    | Sort-Object -Property Name 
+    | Foreach-Object { Write-Host $_.Name }
 }
