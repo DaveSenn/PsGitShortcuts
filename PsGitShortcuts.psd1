@@ -12,7 +12,7 @@
 RootModule = 'PsGitShortcuts.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.0'
+ModuleVersion = '1.2.1'
 
 # ID used to uniquely identify this module
 GUID = '5e0c3114-c5df-4dae-9339-f2cf5170b9d8'
@@ -100,7 +100,7 @@ CmdletsToExport = @()
 VariablesToExport = @()
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = @()
+AliasesToExport = "*"
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
