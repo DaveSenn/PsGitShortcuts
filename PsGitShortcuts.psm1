@@ -12,6 +12,11 @@ Foreach ( $import in @( $Private + $Public ) ) {
     }
 }
 
+# Alias - CloseFeatureBranch
+New-Alias -Name cfb -Value CloseFeature
+# PurgeBranches
+New-Alias -Name pb -Value PurgeBranches
+
 # Export
 $exportModuleMemberParams = @{
     Function = @(
@@ -37,5 +42,6 @@ $exportModuleMemberParams = @{
         # Help
         "PsGitHelp"
     )
+    Alias = "*"
 }
 Export-ModuleMember @exportModuleMemberParams
