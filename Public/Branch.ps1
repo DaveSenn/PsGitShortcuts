@@ -90,7 +90,7 @@ Function SyncBranch() {
         Write-Host "Rebase $branch failed => abort" -ForegroundColor Yellow
         return
     }
-    if ( $out.Contains( "CONFLICT" ) -or !$out.Contains( "Successfully" ) ) {
+    if ( $out.Contains( "CONFLICT" ) -and !$out.Contains( "Successfully" ) -and !$out.Contains("is up to date.")) {
         foreach ( $x in $out ) {
             Write-Host $x
         }
