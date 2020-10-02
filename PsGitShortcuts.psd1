@@ -12,7 +12,7 @@
 RootModule = 'PsGitShortcuts.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.1'
+ModuleVersion = '1.2.2'
 
 # ID used to uniquely identify this module
 GUID = '5e0c3114-c5df-4dae-9339-f2cf5170b9d8'
